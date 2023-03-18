@@ -62,6 +62,7 @@ public class CanvasController : MonoBehaviour
         }).setOnComplete(() =>
         {
             foreach (GameObject menu in _menus) menu.SetActive(false);
+            _canvasGroup.alpha = 1;
         });
     }
 }

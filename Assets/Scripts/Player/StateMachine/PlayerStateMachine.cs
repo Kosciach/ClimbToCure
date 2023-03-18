@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class PlayerStateMachine : MonoBehaviour
 {
+    [SerializeField] string _currentStateName; public string CurrentStateName { get { return _currentStateName; } set { _currentStateName = value; } }
     private PlayerBaseState _currentState; public PlayerBaseState CurrentState { get { return _currentState; } set { _currentState = value; } }
+
+
     private PlayerStateFactory _stateFactory; public PlayerStateFactory StateFactory { get { return _stateFactory; } }
 
-    [SerializeField] string _currentStateName; public string CurrentStateName { get { return _currentStateName; } set { _currentStateName = value; } }
 
 
 
@@ -127,9 +129,19 @@ public class PlayerStateMachine : MonoBehaviour
     {
         _switch.MainMenu = false;
     }
+
+    private bool _isPause;
     private void Pause()
     {
-        _switch.Pause = !_switch.Pause;
+        _isPause = !_isPause;
+
+        Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = _isPause;
+
+        Time.timeScale = _isPause ? 0 : 1;
+
+        _cineInput.enabled = !_isPause;
+        _canvasController.TogglePause(_isPause);
     }
 
 

@@ -33,8 +33,4 @@ public class PlayerStateFactory
     {
         return new PlayerMainMenuState(_ctx, this, "MainMenu");
     }
-    public PlayerBaseState Pause()
-    {
-        return new PlayerPauseState(_ctx, this, "Pause");
-    }
 }

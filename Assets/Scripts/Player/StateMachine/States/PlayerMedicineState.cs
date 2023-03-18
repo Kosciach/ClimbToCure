@@ -26,12 +26,13 @@ public class PlayerMedicineState : PlayerBaseState
         }).setOnComplete(() =>
         {
             _ctx.PathController.SwitchPath();
-            LeanTween.value(_cinePOV.m_VerticalAxis.Value, 430, 2f).setOnUpdate((float val) =>
+            LeanTween.value(_cinePOV.m_VerticalAxis.Value, 360, 2f).setOnUpdate((float val) =>
             {
                 _cinePOV.m_VerticalAxis.Value = val;
 
             }).setOnComplete(() =>
             {
+                _cinePOV.m_VerticalAxis.Value = 0;
                 _cinePOV.m_VerticalAxis.m_Wrap = false;
                 _cinePOV.m_VerticalAxis.m_MinValue = -70f;
                 _cinePOV.m_VerticalAxis.m_MaxValue = 70f;

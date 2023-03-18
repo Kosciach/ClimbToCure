@@ -28,7 +28,6 @@ public class PlayerGroundedState : PlayerBaseState
         if (_ctx.Switch.InAir) StateChange(_factory.InAir());
         else if (_ctx.Switch.Slide) StateChange(_factory.Slide());
         else if (_ctx.Switch.Medicine) StateChange(_factory.Medicine());
-        else if (_ctx.Switch.Pause) StateChange(_factory.Pause());
     }
     public override void StateExit()
     {
