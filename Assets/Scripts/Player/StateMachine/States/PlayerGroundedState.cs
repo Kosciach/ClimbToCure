@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
-public class PlayerCombatState : PlayerBaseState
+public class PlayerGroundedState : PlayerBaseState
 {
-    public PlayerCombatState(PlayerStateMachine ctx, PlayerStateFactory factory, string stateName) : base(ctx, factory, stateName) { }
+    public PlayerGroundedState(PlayerStateMachine ctx, PlayerStateFactory factory, string stateName) : base(ctx, factory, stateName) { }
 
 
 
@@ -14,6 +13,7 @@ public class PlayerCombatState : PlayerBaseState
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        _ctx.JumpCount = 0;
     }
     public override void StateUpdate()
     {
@@ -25,11 +25,14 @@ public class PlayerCombatState : PlayerBaseState
     }
     public override void StateCheckChange()
     {
+        if (_ctx.Switch.InAir) StateChange(_factory.InAir());
+        else if (_ctx.Switch.Slide) StateChange(_factory.Slide());
+        else if (_ctx.Switch.Medicine) StateChange(_factory.Medicine());
+        else if (_ctx.Switch.Pause) StateChange(_factory.Pause());
     }
     public override void StateExit()
     {
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+
     }
 
 

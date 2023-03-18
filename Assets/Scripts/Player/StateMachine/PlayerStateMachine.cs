@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class PlayerStateMachine : MonoBehaviour
 
 
 
+
     [Space(20)]
     [Header("====PlayerScripts====")]
     [SerializeField] MovementController _movementController; public MovementController MovementController { get { return _movementController; } }
@@ -18,15 +20,56 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] CameraController _cameraController; public CameraController CameraController { get { return _cameraController; } }
 
 
-    //[Space(20)]
-    //[Header("====References====")]
+
+
+    [Space(20)]
+    [Header("====References====")]
+    [SerializeField] Rigidbody _rigidbody; public Rigidbody Rigidbody { get { return _rigidbody; } }
+    [SerializeField] CinemachineInputProvider _cineInput; public CinemachineInputProvider CineInput { get { return _cineInput; } set { _cineInput = value; } }
+    [SerializeField] CinemachineVirtualCamera _cineCamera; public CinemachineVirtualCamera CineCamera { get { return _cineCamera; } set { _cineCamera = value; } }
+    [SerializeField] PathController _pathController; public PathController PathController { get { return _pathController; } }
+    [SerializeField] CanvasController _canvasController; public CanvasController CanvasController { get { return _canvasController; } }
+
+
+
+
+    [Space(20)]
+    [Header("====Settings====")]
+    [Range(0, 1)]
+    [SerializeField] float _slideSize; public float SlideSize { get { return _slideSize; } }
+    [Range(0, 100)]
+    [SerializeField] float _slideTime; public float SlideTime { get { return _slideTime; } set { _slideTime = value; } }
+
+
+
+
+    [Space(20)]
+    [Header("====Debugs====")]
+    [SerializeField] SwitchClass _switch; public SwitchClass Switch { get { return _switch; } set { _switch = value; } }
+    [SerializeField] int _jumpCount; public int JumpCount { get { return _jumpCount; } set { _jumpCount = value; } }
+
+
+
+
+
+
+    [System.Serializable]
+    public class SwitchClass
+    {
+        public bool InAir;
+        public bool Slide;
+        public bool Medicine;
+        public bool MainMenu;
+        public bool Pause;
+    }
+
 
 
 
     private void Awake()
     {
         _stateFactory = new PlayerStateFactory(this);
-        _currentState = _stateFactory.Combat();
+        _currentState = _stateFactory.MainMenu();
         _currentState.StateEnter();
     }
 
@@ -34,9 +77,75 @@ public class PlayerStateMachine : MonoBehaviour
     private void Update()
     {
         _currentState.StateUpdate();
+        _currentState.StateCheckChange();
     }
     private void FixedUpdate()
     {
         _currentState.StateFixedUpdate();
+    }
+
+
+
+
+
+
+
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Medicine"))
+        {
+            Destroy(other.gameObject);
+            _switch.Medicine = true;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    private void SetJump()
+    {
+        if (_jumpCount >= 2) return;
+
+        _jumpCount++;
+        _switch.InAir = true;
+        _switch.Slide = false;
+        _movementController.Jump();
+    }
+    private void SetSlide()
+    {
+        _switch.Slide = true;
+    }
+    private void StartGame()
+    {
+        _switch.MainMenu = false;
+    }
+    private void Pause()
+    {
+        _switch.Pause = !_switch.Pause;
+    }
+
+
+
+    private void OnEnable()
+    {
+        InputController.Jump += SetJump;
+        InputController.Slide += SetSlide;
+        CameraController.GameStart += StartGame;
+        InputController.Pause += Pause;
+    }
+    private void OnDisable()
+    {
+        InputController.Jump -= SetJump;
+        InputController.Slide -= SetSlide;
+        CameraController.GameStart -= StartGame;
+        InputController.Pause -= Pause;
     }
 }

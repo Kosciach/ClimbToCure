@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -17,6 +18,8 @@ public class InputController : MonoBehaviour
     public static event InputControllerEvent Sprint;
     public static event InputControllerEvent Walk;
     public static event InputControllerEvent Jump;
+    public static event InputControllerEvent Slide;
+    public static event InputControllerEvent Pause;
 
 
     private PlayerInputs _playerInputs;
@@ -45,6 +48,8 @@ public class InputController : MonoBehaviour
         _playerInputs.Player.Sprint.started += ctx => Sprint();
         _playerInputs.Player.Sprint.canceled += ctx => Walk();
         _playerInputs.Player.Jump.performed += ctx => Jump();
+        _playerInputs.Player.Slide.performed += ctx => Slide();
+        _playerInputs.Player.Esc.performed += ctx => Pause();
     }
 
 

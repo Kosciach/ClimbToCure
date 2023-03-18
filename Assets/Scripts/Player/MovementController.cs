@@ -9,6 +9,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] InputController _inputController;
     [SerializeField] Rigidbody _rigidbody;
     [SerializeField] Transform _groundCheck;
+    [SerializeField] PlayerStateMachine _playerStateMachine;
 
     [Space(20)]
     [Header("====Debug====")]
@@ -25,19 +26,25 @@ public class MovementController : MonoBehaviour
     [Range(0, 20)]
     [SerializeField] float _sprintSpeed;
     [Range(0, 20)]
+    [SerializeField] float _slideSpeed;
+    [Range(0, 20)]
     [SerializeField] float _accelarationSpeed;
     [Range(0, 20)]
     [SerializeField] float _jumpForce;
 
 
     private Vector3 _movementVectorLerped;
-
+    private Vector3 _slideVector;
+    private float _onGroundSpeed;
 
 
     private void Update()
     {
         CheckGround();
     }
+
+
+
 
 
     public void Movement()
@@ -53,26 +60,51 @@ public class MovementController : MonoBehaviour
     }
 
 
+
     private void CheckGround()
     {
         _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask);
     }
-
-
-    private void Jump()
+    public void Jump()
     {
-        if (!_isGrounded) return;
-
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+    }
+
+
+
+    public void GetSlideVector()
+    {
+        _speed = _slideSpeed;
+        _slideVector = (transform.forward * _inputController.MovementVectorInput.z + transform.right * _inputController.MovementVectorInput.x) * _speed;
+    }
+
+    public void Slide()
+    {
+        _rigidbody.velocity = _slideVector;
+    }
+    public void RestoreSpeed()
+    {
+        _speed = _onGroundSpeed;
+    }
+
+
+
+    public bool GetIsGrounded()
+    {
+        return _isGrounded;
     }
 
 
     private void SetSprint()
     {
+        _onGroundSpeed = _sprintSpeed;
+        if (_playerStateMachine.Switch.Slide) return;
         _speed = _sprintSpeed;
     }
     private void SetWalk()
     {
+        _onGroundSpeed = _walkSpeed;
+        if (_playerStateMachine.Switch.Slide) return;
         _speed = _walkSpeed;
     }
 
@@ -83,12 +115,10 @@ public class MovementController : MonoBehaviour
     {
         InputController.Sprint += SetSprint;
         InputController.Walk += SetWalk;
-        InputController.Jump += Jump;
     }
     private void OnDisable()
     {
         InputController.Sprint -= SetSprint;
         InputController.Walk -= SetWalk;
-        InputController.Jump -= Jump;
     }
 }
