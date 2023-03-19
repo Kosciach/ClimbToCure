@@ -69,7 +69,7 @@ public class PlayerStateMachine : MonoBehaviour
         public bool WallJump;
     }
 
-    private bool _isPause;
+    private bool _isPause; public bool IsPause { get { return _isPause; } }
 
 
 
@@ -105,10 +105,12 @@ public class PlayerStateMachine : MonoBehaviour
             Destroy(other.gameObject);
             _switch.Medicine = true;
             _rigidbody.velocity = Vector3.zero;
+            AudioController.Instance.PlaySound(5);
         }
         else if(other.CompareTag("Fall"))
         {
             _switch.Fall = true;
+            AudioController.Instance.PlaySound(4);
         }
         else if (other.CompareTag("WallJump"))
         {
@@ -137,6 +139,7 @@ public class PlayerStateMachine : MonoBehaviour
         _jumpCount++;
         if (_currentStateName == "WallJump")
         {
+            AudioController.Instance.PlaySound(3);
             _movementController.WallJump();
             _switch.InAir = true;
             _switch.Slide = false;
@@ -146,6 +149,7 @@ public class PlayerStateMachine : MonoBehaviour
         {
             _switch.InAir = true;
             _switch.Slide = false;
+            AudioController.Instance.PlaySound(2);
             _movementController.Jump();
         }
     }

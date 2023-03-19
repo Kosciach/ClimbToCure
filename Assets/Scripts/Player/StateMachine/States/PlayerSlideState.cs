@@ -25,7 +25,7 @@ public class PlayerSlideState : PlayerBaseState
     {
         _timer--;
         _timer = Mathf.Clamp(_timer, 0, _ctx.SlideTime);
-        _ctx.HealthController.Poisoning();
+        if (!_ctx.IsPause) _ctx.HealthController.Poisoning();
     }
 
     public override void StateFixedUpdate()

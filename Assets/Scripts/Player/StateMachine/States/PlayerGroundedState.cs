@@ -14,11 +14,12 @@ public class PlayerGroundedState : PlayerBaseState
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         _ctx.JumpCount = 0;
+        AudioController.Instance.PlaySound(0);
     }
     public override void StateUpdate()
     {
         _ctx.CameraController.RotatePlayer();
-        _ctx.HealthController.Poisoning();
+        if(!_ctx.IsPause) _ctx.HealthController.Poisoning();
     }
     public override void StateFixedUpdate()
     {

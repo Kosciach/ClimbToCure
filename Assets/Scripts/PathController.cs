@@ -15,6 +15,7 @@ public class PathController : MonoBehaviour
     [SerializeField] Transform _player;
     [SerializeField] GameObject _startingPlatformPrefab;
     [SerializeField] GameObject _startingPlatform;
+    [SerializeField] HealthController _healthController;
 
 
     [Space(20)]
@@ -25,6 +26,7 @@ public class PathController : MonoBehaviour
     [Space(20)]
     [Header("====Settings====")]
     [SerializeField] string _pathKey;
+    [SerializeField] float[] _poisonSpeeds;
 
 
 
@@ -33,6 +35,7 @@ public class PathController : MonoBehaviour
         PlayerPrefs.SetInt(_pathKey, 0);
         _pathIndex = 0;
         _currentPath = Instantiate(_paths[_pathIndex], Vector3.zero, Quaternion.identity);
+        _healthController.SetPoisonSpeed(_poisonSpeeds[_pathIndex]);
     }
     private void Continue()
     {
@@ -41,6 +44,7 @@ public class PathController : MonoBehaviour
         _pathIndex = PlayerPrefs.GetInt(_pathKey);
 
         _currentPath = Instantiate(_paths[_pathIndex], Vector3.zero, Quaternion.identity);
+        _healthController.SetPoisonSpeed(_poisonSpeeds[_pathIndex]);
     }
 
 
@@ -55,6 +59,7 @@ public class PathController : MonoBehaviour
 
         _oldPath = _currentPath;
         _currentPath = Instantiate(_paths[_pathIndex], _oldPath.transform.GetChild(1).position, Quaternion.identity);
+        _healthController.SetPoisonSpeed(_poisonSpeeds[_pathIndex]);
 
         //Remove old path
         Destroy(_oldPath);
@@ -71,6 +76,7 @@ public class PathController : MonoBehaviour
 
         _oldPath = _currentPath;
         _currentPath = Instantiate(_paths[_pathIndex], Vector3.zero, Quaternion.identity);
+        _healthController.SetPoisonSpeed(_poisonSpeeds[_pathIndex]);
 
         Destroy(_oldPath);
     }

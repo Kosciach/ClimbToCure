@@ -18,7 +18,7 @@ public class PlayerInAirState : PlayerBaseState
     public override void StateUpdate()
     {
         _ctx.CameraController.RotatePlayer();
-        _ctx.HealthController.Poisoning();
+        if (!_ctx.IsPause) _ctx.HealthController.Poisoning();
     }
     public override void StateFixedUpdate()
     {

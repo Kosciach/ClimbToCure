@@ -36,4 +36,8 @@ public class HealthController : MonoBehaviour
 
         if (_health <= 0) _playerStateMachine.Switch.Fall = true;
     }
+    public void SetPoisonSpeed(float poisonSpeed)
+    {
+        _poisonSpeed = poisonSpeed;
+    }
 }
