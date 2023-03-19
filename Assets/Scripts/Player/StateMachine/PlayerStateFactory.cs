@@ -37,4 +37,8 @@ public class PlayerStateFactory
     {
         return new PlayerFallState(_ctx, this, "Fall");
     }
+    public PlayerBaseState WallJump()
+    {
+        return new PlayerJumpWallState(_ctx, this, "WallJump");
+    }
 }

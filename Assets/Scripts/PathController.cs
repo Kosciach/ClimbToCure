@@ -13,6 +13,8 @@ public class PathController : MonoBehaviour
     [Space(20)]
     [Header("====References====")]
     [SerializeField] Transform _player;
+    [SerializeField] GameObject _startingPlatformPrefab;
+    [SerializeField] GameObject _startingPlatform;
 
 
     [Space(20)]
@@ -46,15 +48,13 @@ public class PathController : MonoBehaviour
     {
         if (_pathIndex == _paths.Length - 1) return;
 
+        if (_startingPlatform != null) Destroy(_startingPlatform);
         //Spawn new path
         _pathIndex++;
         PlayerPrefs.SetInt(_pathKey, _pathIndex);
 
         _oldPath = _currentPath;
-        _currentPath = Instantiate(_paths[_pathIndex], Vector3.zero, Quaternion.identity);
-
-        //Teleport player to starting platform of new path
-        _player.transform.position = new Vector3(0f, 0.5f, 0f);
+        _currentPath = Instantiate(_paths[_pathIndex], _oldPath.transform.GetChild(1).position, Quaternion.identity);
 
         //Remove old path
         Destroy(_oldPath);
@@ -64,6 +64,7 @@ public class PathController : MonoBehaviour
     {
         if (_pathIndex == 0) return;
 
+        if (_pathIndex == 1) _startingPlatform = Instantiate(_startingPlatformPrefab, Vector3.zero, Quaternion.identity);
 
         _pathIndex--;
         PlayerPrefs.SetInt(_pathKey, _pathIndex);

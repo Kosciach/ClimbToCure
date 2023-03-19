@@ -54,7 +54,18 @@ public class CameraController : MonoBehaviour
     }
     public void MoveToMainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        _cinePOV.m_VerticalAxis.m_Wrap = true;
+        _cinePOV.m_VerticalAxis.m_MinValue = -180;
+        _cinePOV.m_VerticalAxis.m_MaxValue = 180;
+
+        _follow.LeanMoveLocal(_mainMenuPosition, _cameraMoveSpeed).setEaseOutBounce();
+        LeanTween.value(_cinePOV.m_VerticalAxis.Value, _mainMenuAngle, _cameraMoveSpeed).setEaseOutBack().setOnUpdate((float val) =>
+        {
+            _cinePOV.m_VerticalAxis.Value = val;
+        }).setOnComplete(() =>
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }); ;
     }
     public void RotatePlayer()
     {

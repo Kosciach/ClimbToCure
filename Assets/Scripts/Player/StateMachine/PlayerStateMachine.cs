@@ -66,6 +66,7 @@ public class PlayerStateMachine : MonoBehaviour
         public bool MainMenu;
         public bool Pause;
         public bool Fall;
+        public bool WallJump;
     }
 
     private bool _isPause;
@@ -97,7 +98,6 @@ public class PlayerStateMachine : MonoBehaviour
 
 
 
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Medicine"))
@@ -110,7 +110,16 @@ public class PlayerStateMachine : MonoBehaviour
         {
             _switch.Fall = true;
         }
+        else if (other.CompareTag("WallJump"))
+        {
+            Debug.Log("jhjhjhjh");
+            _rigidbody.velocity = Vector3.zero;
+            _jumpCount = 1;
+            _switch.WallJump = true;
+            _rigidbody.useGravity = false;
+        }
     }
+
 
 
 
@@ -123,12 +132,22 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void SetJump()
     {
-        if (_jumpCount >= 2) return;
+        if (_jumpCount >= 2 || _currentStateName == "MainMenu" || _currentStateName == "Medicine" || _currentStateName == "Fall") return;
 
         _jumpCount++;
-        _switch.InAir = true;
-        _switch.Slide = false;
-        _movementController.Jump();
+        if (_currentStateName == "WallJump")
+        {
+            _movementController.WallJump();
+            _switch.InAir = true;
+            _switch.Slide = false;
+            _rigidbody.useGravity = true;
+        }
+        else
+        {
+            _switch.InAir = true;
+            _switch.Slide = false;
+            _movementController.Jump();
+        }
     }
     private void SetSlide()
     {
@@ -141,6 +160,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Pause()
     {
+        if (_currentStateName == "MainMenu" || _currentStateName == "Medicine" || _currentStateName == "Fall") return;
+
         _isPause = !_isPause;
 
         Cursor.lockState = _isPause ? CursorLockMode.None : CursorLockMode.Locked;

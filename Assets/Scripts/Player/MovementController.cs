@@ -15,6 +15,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera _cineCamera;
     [SerializeField] ParticleSystem _groundParticle;
     [SerializeField] Material _groundParticleMaterial;
+    [SerializeField] Transform _camera;
 
     [Space(20)]
     [Header("====Debug====")]
@@ -85,7 +86,7 @@ public class MovementController : MonoBehaviour
 
         Vector3 correctedMovementVector = new Vector3(_movementVectorLerped.x, _rigidbody.velocity.y, _movementVectorLerped.z);
 
-        if (_isGrounded && _movementVectorLerped.magnitude > 0) Instantiate(_groundParticle, transform.position, Quaternion.identity);
+        if (_isGrounded) Instantiate(_groundParticle, transform.position, Quaternion.identity);
 
         _rigidbody.velocity = correctedMovementVector;
     }
@@ -99,6 +100,10 @@ public class MovementController : MonoBehaviour
     public void Jump()
     {
         _rigidbody.AddForce(Vector3.up * _jumpForce, ForceMode.Impulse);
+    }
+    public void WallJump()
+    {
+        _rigidbody.AddForce((transform.forward+ Vector3.up) * _jumpForce * 1.5f, ForceMode.Impulse);
     }
 
 

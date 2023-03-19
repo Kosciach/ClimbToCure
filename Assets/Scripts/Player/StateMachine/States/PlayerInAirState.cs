@@ -30,6 +30,7 @@ public class PlayerInAirState : PlayerBaseState
         else if (_ctx.Switch.Medicine) StateChange(_factory.Medicine());
         else if (_ctx.Switch.Fall) StateChange(_factory.Fall());
         else if (_ctx.Switch.MainMenu) StateChange(_factory.MainMenu());
+        else if (_ctx.Switch.WallJump) StateChange(_factory.WallJump());
     }
     public override void StateExit()
     {
