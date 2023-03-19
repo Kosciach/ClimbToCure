@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 376644850112015559}
   - component: {fileID: 376644850112015556}
   - component: {fileID: 376644850112015557}
-  m_Layer: 3
+  m_Layer: 6
   m_Name: IcePlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}

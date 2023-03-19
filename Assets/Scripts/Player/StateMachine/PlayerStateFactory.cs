@@ -33,4 +33,8 @@ public class PlayerStateFactory
     {
         return new PlayerMainMenuState(_ctx, this, "MainMenu");
     }
+    public PlayerBaseState Fall()
+    {
+        return new PlayerFallState(_ctx, this, "Fall");
+    }
 }

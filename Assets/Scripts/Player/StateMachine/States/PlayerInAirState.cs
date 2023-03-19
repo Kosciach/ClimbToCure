@@ -18,6 +18,7 @@ public class PlayerInAirState : PlayerBaseState
     public override void StateUpdate()
     {
         _ctx.CameraController.RotatePlayer();
+        _ctx.HealthController.Poisoning();
     }
     public override void StateFixedUpdate()
     {
@@ -27,6 +28,8 @@ public class PlayerInAirState : PlayerBaseState
     {
         if (_ctx.MovementController.GetIsGrounded() && _ctx.Rigidbody.velocity.y < 0) StateChange(_factory.Grounded());
         else if (_ctx.Switch.Medicine) StateChange(_factory.Medicine());
+        else if (_ctx.Switch.Fall) StateChange(_factory.Fall());
+        else if (_ctx.Switch.MainMenu) StateChange(_factory.MainMenu());
     }
     public override void StateExit()
     {

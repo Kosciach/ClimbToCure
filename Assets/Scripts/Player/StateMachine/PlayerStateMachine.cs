@@ -20,6 +20,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] MovementController _movementController; public MovementController MovementController { get { return _movementController; } }
     [SerializeField] InputController _inputController; public InputController InputController { get { return _inputController;} }
     [SerializeField] CameraController _cameraController; public CameraController CameraController { get { return _cameraController; } }
+    [SerializeField] HealthController _healthController; public HealthController HealthController { get { return _healthController; } }
 
 
 
@@ -31,6 +32,7 @@ public class PlayerStateMachine : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera _cineCamera; public CinemachineVirtualCamera CineCamera { get { return _cineCamera; } set { _cineCamera = value; } }
     [SerializeField] PathController _pathController; public PathController PathController { get { return _pathController; } }
     [SerializeField] CanvasController _canvasController; public CanvasController CanvasController { get { return _canvasController; } }
+    [SerializeField] UIController _UIController; public UIController UIController { get { return _UIController; } }
 
 
 
@@ -63,8 +65,10 @@ public class PlayerStateMachine : MonoBehaviour
         public bool Medicine;
         public bool MainMenu;
         public bool Pause;
+        public bool Fall;
     }
 
+    private bool _isPause;
 
 
 
@@ -100,6 +104,11 @@ public class PlayerStateMachine : MonoBehaviour
         {
             Destroy(other.gameObject);
             _switch.Medicine = true;
+            _rigidbody.velocity = Vector3.zero;
+        }
+        else if(other.CompareTag("Fall"))
+        {
+            _switch.Fall = true;
         }
     }
 
@@ -130,7 +139,6 @@ public class PlayerStateMachine : MonoBehaviour
         _switch.MainMenu = false;
     }
 
-    private bool _isPause;
     private void Pause()
     {
         _isPause = !_isPause;
@@ -143,7 +151,23 @@ public class PlayerStateMachine : MonoBehaviour
         _cineInput.enabled = !_isPause;
         _canvasController.TogglePause(_isPause);
     }
+    private void Resume()
+    {
+        _isPause = false;
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        Time.timeScale = 1;
+
+        _cineInput.enabled = true;
+        _canvasController.TogglePause(false);
+    }
+    private void GoToMainMenu()
+    {
+        _switch.MainMenu = true;
+    }
+    
 
 
     private void OnEnable()
@@ -152,6 +176,8 @@ public class PlayerStateMachine : MonoBehaviour
         InputController.Slide += SetSlide;
         CameraController.GameStart += StartGame;
         InputController.Pause += Pause;
+        CanvasController.Resume += Resume;
+        CanvasController.GoToMainMenu += GoToMainMenu;
     }
     private void OnDisable()
     {
@@ -159,5 +185,7 @@ public class PlayerStateMachine : MonoBehaviour
         InputController.Slide -= SetSlide;
         CameraController.GameStart -= StartGame;
         InputController.Pause -= Pause;
+        CanvasController.Resume -= Resume;
+        CanvasController.GoToMainMenu -= GoToMainMenu;
     }
 }

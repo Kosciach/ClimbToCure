@@ -16,14 +16,23 @@ public class CanvasController : MonoBehaviour
     [SerializeField] CanvasGroup _canvasGroup;
 
 
+    public delegate void CanvasControllerEvent();
+    public static event CanvasControllerEvent Resume;
+    public static event CanvasControllerEvent NewGame;
+    public static event CanvasControllerEvent Continue;
+    public static event CanvasControllerEvent GoToMainMenu;
+
     public void NewGameButton()
     {
+        NewGame();
         _cameraController.MoveToGameplay();
         HideCanvasSmooth();
     }
     public void ContinueButton()
     {
+        Continue();
         _cameraController.MoveToGameplay();
+        HideCanvasSmooth();
     }
 
 
@@ -37,9 +46,14 @@ public class CanvasController : MonoBehaviour
     {
         Application.Quit();
     }
+    public void MainMenuButton()
+    {
+        GoToMainMenu();
+        ChangeMenuButton(_menus[0]);
+    }
     public void ResumeButton()
     {
-
+        Resume();
     }
 
 
@@ -52,7 +66,6 @@ public class CanvasController : MonoBehaviour
     {
         _pauseMenu.SetActive(enable);
     }
-
 
     private void HideCanvasSmooth()
     {

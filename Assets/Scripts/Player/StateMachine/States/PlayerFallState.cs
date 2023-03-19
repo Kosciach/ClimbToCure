@@ -3,22 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMainMenuState : PlayerBaseState
+public class PlayerFallState : PlayerBaseState
 {
-    private CinemachinePOV _cinePOV;
-    public PlayerMainMenuState(PlayerStateMachine ctx, PlayerStateFactory factory, string stateName) : base(ctx, factory, stateName) { }
+    public PlayerFallState(PlayerStateMachine ctx, PlayerStateFactory factory, string stateName) : base(ctx, factory, stateName) { }
 
 
 
 
     public override void StateEnter()
     {
-        _ctx.UIController.ToggleHealth(false);
         _ctx.HealthController.ResetHealth();
 
         _ctx.CineInput.enabled = false;
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        _ctx.PathController.Fall();
+        LeanTween.move(_ctx.gameObject, new Vector3(0f, 0.5f, 0f), 0.5f).setOnComplete(() =>
+        {
+            _ctx.Switch.Fall = false;
+        });
     }
 
     public override void StateUpdate()
@@ -33,12 +34,11 @@ public class PlayerMainMenuState : PlayerBaseState
 
     public override void StateCheckChange()
     {
-        if (!_ctx.Switch.MainMenu) StateChange(_factory.Grounded());
+        if (!_ctx.Switch.Fall) StateChange(_factory.Grounded());
     }
 
     public override void StateExit()
     {
         _ctx.CineInput.enabled = true;
-        _ctx.UIController.ToggleHealth(true);
     }
 }

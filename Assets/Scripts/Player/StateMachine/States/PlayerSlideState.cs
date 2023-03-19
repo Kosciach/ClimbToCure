@@ -25,6 +25,7 @@ public class PlayerSlideState : PlayerBaseState
     {
         _timer--;
         _timer = Mathf.Clamp(_timer, 0, _ctx.SlideTime);
+        _ctx.HealthController.Poisoning();
     }
 
     public override void StateFixedUpdate()
@@ -37,6 +38,8 @@ public class PlayerSlideState : PlayerBaseState
         if (_ctx.Switch.InAir) StateChange(_factory.InAir());
         else if (_timer <= 0) StateChange(_factory.Grounded());
         else if (_ctx.Switch.Medicine) StateChange(_factory.Medicine());
+        else if (_ctx.Switch.Fall) StateChange(_factory.Fall());
+        else if (_ctx.Switch.MainMenu) StateChange(_factory.MainMenu());
     }
 
     public override void StateExit()

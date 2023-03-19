@@ -13,6 +13,8 @@ public class PlayerMedicineState : PlayerBaseState
 
     public override void StateEnter()
     {
+        _ctx.HealthController.ResetHealth();
+
         _ctx.CineInput.enabled = false;
         _cinePOV = _ctx.CineCamera.GetCinemachineComponent<CinemachinePOV>();
         _cinePOV.m_VerticalAxis.m_MinValue = -180f;

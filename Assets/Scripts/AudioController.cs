@@ -12,15 +12,10 @@ public class AudioController : MonoBehaviour
 
 
     [Space(20)]
-    [Header("====AudioClips====")]
-    [SerializeField] AudioClip _startMusic;
-    [SerializeField] AudioClip _mainMusic;
-
-
-    [Space(20)]
     [Header("====Sliders====")]
-    [SerializeField] Slider _soundSlider;
-    [SerializeField] Slider _musicSlider;
+    [SerializeField] Slider[] _soundSliders;
+    [SerializeField] Slider[] _musicSliders;
+
 
     [Space(20)]
     [Header("====Keys====")]
@@ -31,18 +26,22 @@ public class AudioController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        StartCoroutine(SwitchMusic());
     }
 
     private void Start()
     {
         if(!PlayerPrefs.HasKey(_soundKey)) PlayerPrefs.SetFloat(_soundKey, 0);
-        _soundSlider.value = PlayerPrefs.GetFloat(_soundKey);
-        foreach (AudioSource soundSource in _soundSources) soundSource.volume = _soundSlider.value;
+
+        foreach(Slider slider in _soundSliders) slider.value = PlayerPrefs.GetFloat(_soundKey);
+        foreach (AudioSource soundSource in _soundSources) soundSource.volume = _soundSliders[0].value;
+
+
+
 
         if (!PlayerPrefs.HasKey(_musicKey)) PlayerPrefs.SetFloat(_musicKey, 0);
-        _musicSlider.value = PlayerPrefs.GetFloat(_musicKey);
-        foreach (AudioSource musicSource in _musicSources) musicSource.volume = _musicSlider.value;
+
+        foreach (Slider slider in _musicSliders) slider.value = PlayerPrefs.GetFloat(_musicKey);
+        foreach (AudioSource musicSource in _musicSources) musicSource.volume = _musicSliders[0].value;
     }
 
     public void PlaySound(int index)
@@ -51,24 +50,18 @@ public class AudioController : MonoBehaviour
     }
 
 
-    public void ChangeSoundVolume()
+    public void ChangeSoundVolume(Slider choosenSlider)
     {
-        PlayerPrefs.SetFloat(_soundKey, _soundSlider.value);
+        PlayerPrefs.SetFloat(_soundKey, choosenSlider.value);
 
-        foreach (AudioSource soundSource in _soundSources) soundSource.volume = _soundSlider.value;
+        foreach (Slider slider in _soundSliders) slider.value = PlayerPrefs.GetFloat(_soundKey);
+        foreach (AudioSource soundSource in _soundSources) soundSource.volume = choosenSlider.value;
     }
-    public void ChangeMusicVolume()
+    public void ChangeMusicVolume(Slider choosenSlider)
     {
-        PlayerPrefs.SetFloat(_musicKey, _musicSlider.value);
+        PlayerPrefs.SetFloat(_musicKey, choosenSlider.value);
 
-        foreach (AudioSource musicSource in _musicSources) musicSource.volume = _musicSlider.value;
-    }
-
-
-    IEnumerator SwitchMusic()
-    {
-        yield return new WaitForSeconds(_startMusic.length - 2.7f);
-        _musicSources[0].clip = _mainMusic;
-        _musicSources[0].Play();
+        foreach (Slider slider in _musicSliders) slider.value = PlayerPrefs.GetFloat(_musicKey);
+        foreach (AudioSource musicSource in _musicSources) musicSource.volume = choosenSlider.value;
     }
 }
