@@ -16,6 +16,7 @@ public class PathController : MonoBehaviour
     [SerializeField] GameObject _startingPlatformPrefab;
     [SerializeField] GameObject _startingPlatform;
     [SerializeField] HealthController _healthController;
+    [SerializeField] CanvasController _canvasController;
 
 
     [Space(20)]
@@ -50,7 +51,12 @@ public class PathController : MonoBehaviour
 
     public void SwitchPath()
     {
-        if (_pathIndex == _paths.Length - 1) return;
+        if (_pathIndex == _paths.Length - 1)
+        {
+            _canvasController.OpenLink("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            _canvasController.MainMenuButton();
+            return;
+        }
 
         if (_startingPlatform != null) Destroy(_startingPlatform);
         //Spawn new path

@@ -8,6 +8,8 @@ TagManager:
   - WallRun
   - WallJump
   - Fall
+  - Bounce
+  - Text
   layers:
   - Default
   - TransparentFX

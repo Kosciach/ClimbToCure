@@ -38,7 +38,7 @@ public class PlayerMedicineState : PlayerBaseState
                 _cinePOV.m_VerticalAxis.m_Wrap = false;
                 _cinePOV.m_VerticalAxis.m_MinValue = -70f;
                 _cinePOV.m_VerticalAxis.m_MaxValue = 70f;
-                _ctx.CineInput.enabled = true;
+                if(_ctx.CineInput != null) _ctx.CineInput.enabled = true;
                 _ctx.Switch.Medicine = false;
             });
         });

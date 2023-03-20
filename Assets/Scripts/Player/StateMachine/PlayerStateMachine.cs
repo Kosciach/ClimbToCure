@@ -120,6 +120,17 @@ public class PlayerStateMachine : MonoBehaviour
             _switch.WallJump = true;
             _rigidbody.useGravity = false;
         }
+        else if(other.CompareTag("Bounce"))
+        {
+            float bounceStrength = other.GetComponent<BounceScripts>().BounceStrength;
+            _rigidbody.velocity = Vector3.zero;
+            _rigidbody.AddForce(Vector3.up * bounceStrength, ForceMode.Impulse);
+            _jumpCount = 2;
+        }
+        else if (other.CompareTag("Text"))
+        {
+            other.transform.GetChild(0).gameObject.SetActive(true);
+        }
     }
 
 

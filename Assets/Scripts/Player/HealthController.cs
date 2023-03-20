@@ -29,7 +29,7 @@ public class HealthController : MonoBehaviour
     }
     public void Poisoning()
     {
-        _health -= _poisonSpeed;
+        _health -= _poisonSpeed * Time.deltaTime;
         _health = Mathf.Clamp(_health, 0, 100);
 
         _UIController.UpdateHealth(_health);
