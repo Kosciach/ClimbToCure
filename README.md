@@ -9,7 +9,8 @@
 
   <p align="center">
     Created for Mini Jam 128:Health.<br>
-    
+    Player has been poisoned and must reach a medicine in time in order to save himself.<br>
+    Game with variety of levels, intense gameplay and nice transitions. 
   </p>
 
 <br>
